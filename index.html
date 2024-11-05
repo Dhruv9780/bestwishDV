@@ -1,1 +1,255 @@
-<h1>check<h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Best of Luck from DV</title>
+  <style>
+    /* Basic styling */
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: #000;
+      color: #fff;
+    }
+
+    .container {
+      position: relative;
+      text-align: center;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 8px;
+      z-index: 1;
+      max-width: 90%;
+    }
+
+    .countdown, .content-option1, .content-option2, .choice-message {
+      font-size: 2rem;
+      margin: 20px 0;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Fireworks effect */
+    .fireworks-background {
+      position: fixed; /* Use fixed to cover the entire viewport */
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+      background: transparent; /* Ensure background is transparent */
+    }
+
+    .firework-particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.8);
+      animation: explode 1.5s ease-out forwards;
+    }
+
+    /* Styles for choice section */
+    .choice-section {
+      position: relative;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 20px;
+      border-radius: 8px;
+      z-index: 2;
+      display: none; /* Initially hidden */
+    }
+
+    .choice-button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 1.2rem;
+      color: #fff;
+      background-color: #333;
+      border: 2px solid #777;
+      cursor: pointer;
+      border-radius: 5px;
+      max-width: 80%;
+    }
+
+    /* Fireworks animation keyframe */
+    @keyframes explode {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1.5);
+        opacity: 0;
+        transform: translate(var(--x-move), var(--y-move));
+      }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      .countdown, .content-option1, .content-option2 {
+        font-size: 1.5rem;
+      }
+
+      .choice-button {
+        font-size: 1rem;
+        padding: 8px 16px;
+      }
+
+      .container {
+        padding: 15px;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .countdown, .content-option1, .content-option2 {
+        font-size: 1.2rem;
+      }
+
+      .choice-button {
+        font-size: 0.9rem;
+        padding: 6px 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Countdown timer display -->
+    <div id="countdown" class="countdown"></div>
+
+    <!-- Choice section that appears after the countdown -->
+    <div id="choice-section" class="choice-section">
+      <p class="choice-message">Please choose an option:</p>
+        <button class="choice-button" onclick="chooseOption('option1')">Got the shabad infront of BABA JI</button>
+      	<button class="choice-button" onclick="chooseOption('option2')">Got Pre-pandal shabad</button>
+    </div>
+
+    <!-- Content that will show based on choice -->
+    <div id="content-option1" class="content-option1 hidden">
+       🎉Congratulations ANU 🎉 <BR>I am truly happy for you! I knew you could achieve this. I wish You Best of luck for your big day! 
+    </div>
+    <div id="content-option2" class="content-option2 hidden">
+       🎉Congratulations ANU 🎉 <BR>  Although i wish that you got infront of BABA Ji but prepandal is good also. Best of Luck for your Big day.❤️  🎉
+    </div>
+
+    <!-- Fireworks background container -->
+    <div class="fireworks-background" id="fireworks-background"></div>
+  </div>
+
+  <script>
+    // Function to get a cookie by name
+    function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+      return null;
+    }
+
+    // Function to set a cookie
+    function setCookie(name, value, days) {
+      const date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      document.cookie = `${name}=${value}; expires=${date.toUTCString()}; path=/`;
+    }
+
+    // Function to handle user choice
+    function chooseOption(option) {
+      // Set the choice in a cookie
+      setCookie("userChoice", option, 7); // Set cookie to expire in 7 days
+
+      // Hide choice section and show selected content
+      document.getElementById("choice-section").style.display = 'none'; // Hide choice section
+      document.getElementById(`content-${option}`).style.display = 'block'; // Show the selected content
+    }
+
+    // Check if the user has already made a choice
+    const userChoice = getCookie("userChoice");
+    if (userChoice) {
+      // If choice exists, hide choice section and show respective content
+      document.getElementById("choice-section").style.display = 'none';
+      document.getElementById(`content-${userChoice}`).style.display = 'block';
+    } else {
+      // If no choice exists, show countdown timer
+      const targetTime = new Date("2024-11-06T06:30:00Z"); // Set target time to November 6, 2024, at 6:30 AM UTC (12:00 PM IST)
+
+      // Function to update the countdown timer
+      function updateCountdown() {
+        const now = new Date().getTime();
+        const distance = targetTime - now;
+
+        if (distance > 0) {
+          // Calculate time components
+          const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+          // Display countdown in the "countdown" div
+          document.getElementById("countdown").innerHTML = `Even though i not good in Art and Craft but i tried to make a card for you <BR> Countdown: ${hours}h ${minutes}m ${seconds}s`;
+        } else {
+          // Time has arrived, hide countdown and show choice section
+          document.getElementById("countdown").style.display = 'none'; // Hide countdown
+          document.getElementById("choice-section").style.display = 'block'; // Show choice section
+          clearInterval(interval);
+        }
+      }
+
+      // Initial call and interval setup
+      updateCountdown(); // Call once to avoid delay
+      const interval = setInterval(updateCountdown, 1000); // Update every second
+    }
+
+    // Enhanced fireworks function to create multiple particles per firework
+    function createFireworks() {
+      const fireworksContainer = document.getElementById("fireworks-background");
+
+      setInterval(() => {
+        const numParticles = 20; // Number of particles per firework
+        const fireworkX = Math.random() * window.innerWidth;
+        const fireworkY = Math.random() * (window.innerHeight / 2); // Limit to upper half for sky effect
+
+        for (let i = 0; i < numParticles; i++) {
+          // Create a firework particle
+          const particle = document.createElement("div");
+          particle.classList.add("firework-particle");
+
+          // Set random color for each particle
+          particle.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 75%)`;
+
+          // Set random movement in X and Y directions (spread)
+          const angle = (Math.PI * 2) * (i / numParticles);
+          const speed = Math.random() * 50 + 50; // Random speed for particles
+          particle.style.setProperty('--x-move', `${Math.cos(angle) * speed}px`);
+          particle.style.setProperty('--y-move', `${Math.sin(angle) * speed}px`);
+
+          // Set initial position of the particle
+          particle.style.left = `${fireworkX}px`;
+          particle.style.top = `${fireworkY}px`;
+
+          // Append particle to fireworks container
+          fireworksContainer.appendChild(particle);
+
+          // Remove particle after animation ends
+          setTimeout(() => {
+            particle.remove();
+          }, 1500);
+        }
+      }, 1000); // Create a new firework every 1 second
+    }
+
+    // Start fireworks background effect
+    createFireworks();
+  </script>
+</body>
+</html>
+
